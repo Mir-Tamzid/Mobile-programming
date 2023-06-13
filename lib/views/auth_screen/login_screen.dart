@@ -1,3 +1,4 @@
+import 'package:flutter_app/Contollers/auth_controller.dart';
 import 'package:flutter_app/views/Home_screen/Home.dart';
 import 'package:flutter_app/views/auth_screen/signup_screen.dart';
 import 'package:flutter_app/widget_common/applogo_widget.dart';
@@ -13,8 +14,14 @@ import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(AuthController());
+    // TextEditingController emailController =
+    //     TextEditingController(); // Create a TextEditingController for email
+    // TextEditingController passwordController =
+    //     TextEditingController(); // Create a TextEditingController for password
     return bgWidget(
         child: Scaffold(
       resizeToAvoidBottomInset: false,
@@ -25,36 +32,58 @@ class LoginScreen extends StatelessWidget {
           10.heightBox,
           "Log in to $appname".text.fontFamily(bold).white.size(18).make(),
           10.heightBox,
-          Column(
-            children: [
-              customTextField(hint: emailHint, title: email),
-              customTextField(hint: passwordHint, title: password),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                      onPressed: () {}, child: forgetPass.text.make())),
-              5.heightBox,
-              // ourButton().box.width(context.screenWidth - 50).make(),
-              ourButton(
-                  color: purple,
-                  title: login,
-                  textColor: whiteColor,
-                  onPress: () {
-                    Get.to(() => const Home());
-                  }).box.width(context.screenWidth - 50).make(),
-              5.heightBox,
-              createNewAccount.text.color(redColor).make(),
-              5.heightBox,
+          Obx(() => Column(
+                    children: [
+                      customTextField(
+                          hint: emailHint,
+                          title: email,
+                          isPass: false,
+                          controller: controller.emailController),
+                      customTextField(
+                          hint: passwordHint,
+                          title: password,
+                          isPass: true,
+                          controller: controller.passwordController),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                              onPressed: () {}, child: forgetPass.text.make())),
+                      5.heightBox,
+                      // ourButton().box.width(context.screenWidth - 50).make(),
+                      controller.isloading.value
+                          ? const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(redColor),
+                            )
+                          : ourButton(
+                              color: purple,
+                              title: login,
+                              textColor: whiteColor,
+                              onPress: () async {
+                                controller.isloading(true);
+                                await controller
+                                    .loginMethod(context: context)
+                                    .then((value) {
+                                  if (value != null) {
+                                    VxToast.show(context, msg: loggedin);
+                                    Get.offAll(() => const Home());
+                                  } else {
+                                    controller.isloading(false);
+                                  }
+                                });
+                              }).box.width(context.screenWidth - 50).make(),
+                      5.heightBox,
+                      createNewAccount.text.color(redColor).make(),
+                      5.heightBox,
 
-              ourButton(
-                  color: yellow,
-                  title: signup,
-                  textColor: redColor,
-                  onPress: () {
-                    Get.to(() => const Signup());
-                  }).box.width(context.screenWidth - 50).make(),
-            ],
-          )
+                      ourButton(
+                          color: yellow,
+                          title: signup,
+                          textColor: redColor,
+                          onPress: () {
+                            Get.to(() => const Signup());
+                          }).box.width(context.screenWidth - 50).make(),
+                    ],
+                  ))
               .box
               .white
               .rounded

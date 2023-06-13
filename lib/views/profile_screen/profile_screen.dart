@@ -3,6 +3,9 @@ import 'package:flutter_app/views/profile_screen/components/details_card.dart';
 import 'package:flutter_app/widget_common/bd_widget.dart';
 import 'package:flutter_app/consts/lists.dart';
 // import '../../consts/lists.dart';
+import 'package:flutter_app/Contollers/auth_controller.dart';
+import 'package:get/get.dart';
+import 'package:flutter_app/views/auth_screen/login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -40,7 +43,10 @@ class ProfileScreen extends StatelessWidget {
                         side: const BorderSide(
                       color: whiteColor,
                     )),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Get.put(AuthController()).signoutMethod(context);
+                      Get.offAll(() => const LoginScreen());
+                    },
                     child: "Log Out".text.fontFamily(semibold).white.make(),
                   )
                 ],
