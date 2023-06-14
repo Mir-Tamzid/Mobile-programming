@@ -1,12 +1,12 @@
 import 'package:flutter_app/consts/consts.dart';
 
-Widget detailsCard({width, String? count, String? title}) {
+Widget detailsCard({String? count, String? title, width}) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      "00".text.fontFamily(bold).color(darkFontGrey).size(16).make(),
+      count!.text.fontFamily(bold).color(darkFontGrey).size(16).make(),
       5.heightBox,
-      "in your cart".text.color(darkFontGrey).make(),
+      title!.text.color(darkFontGrey).make(),
     ],
   )
       .box
