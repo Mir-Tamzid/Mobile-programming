@@ -11,31 +11,32 @@ import 'package:path/path.dart';
 import '../consts/firebase_consts.dart';
 
 class ProfileController extends GetxController {
-  get nameController => null;
+//   get nameController => null;
 
-  get passController => null;
+//   get passController => null;
 
-  changeImage(BuildContext context) {}
-}
+//   changeImage(BuildContext context) {}
+// }
 
-var profileImgPath = ''.obs;
+  var profileImgPath = ''.obs;
 
-var profileImageLink = '';
+  var profileImageLink = '';
 
-var isloading = false.obs;
+  var isloading = false.obs;
 
-//textfield
-var nameController = TextEditingController();
-var passController = TextEditingController();
+// //textfield
+  var nameController = TextEditingController();
+  var passController = TextEditingController();
 
-changeImage(context) async {
-  try {
-    final img = await ImagePicker()
-        .pickImage(source: ImageSource.gallery, imageQuality: 70);
-    if (img == null) return;
-    profileImgPath.value = img.path;
-  } on PlatformException catch (e) {
-    VxToast.show(context, msg: e.toString());
+  changeImage(context) async {
+    try {
+      final img = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 70);
+      if (img == null) return;
+      profileImgPath.value = img.path;
+    } on PlatformException catch (e) {
+      VxToast.show(context, msg: e.toString());
+    }
   }
 
   uploadProfileImage() async {
@@ -46,7 +47,10 @@ changeImage(context) async {
     profileImageLink = await ref.getDownloadURL();
   }
 
-  updateProfile({name, password, imgUrl}) async {
+  updateProfile(
+      {required String imgUrl,
+      required String name,
+      required String password}) async {
     var store = firestore.collection(usersCollection).doc(currentUser!.uid);
     await store.set({'name': name, 'password': password, 'imageUrl': imgUrl},
         SetOptions(merge: true));

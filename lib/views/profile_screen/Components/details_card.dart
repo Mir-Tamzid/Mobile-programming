@@ -1,6 +1,10 @@
 import 'package:flutter_app/consts/consts.dart';
 
-Widget detailsCard({String? count, String? title, width}) {
+Widget detailsCard({
+  width,
+  String? count,
+  String? title,
+}) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
